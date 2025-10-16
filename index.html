@@ -86,7 +86,7 @@
         .color-code {
             font-size: 3rem;
             font-weight: 700;
-            color: #667eea; /* Couleur initiale */
+            color: #ff6b35; /* Couleur initiale */
             font-family: 'Courier New', monospace; /* Police à chasse fixe */
             letter-spacing: 3px; /* Espacement pour lisibilité */
             transition: color 0.5s ease; /* Transition de couleur fluide */
@@ -107,7 +107,7 @@
 
         /* Bouton principal avec dégradé */
         button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
             color: white;
             border: none;
             padding: 18px 45px;
@@ -116,7 +116,7 @@
             border-radius: 50px; /* Bouton arrondi (pill shape) */
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -124,13 +124,13 @@
         /* Effet au survol du bouton */
         button:hover {
             transform: translateY(-3px); /* Lévitation au survol */
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5); /* Ombre agrandie */
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.5); /* Ombre agrandie */
         }
 
         /* Effet au clic du bouton */
         button:active {
             transform: translateY(-1px); /* Légère compression */
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
         }
 
         /* ===================================
@@ -225,7 +225,7 @@
             <div class="color-preview" id="colorPreview"></div>
 
             <!-- Code hexadécimal de la couleur -->
-            <div class="color-code" id="colorCode">#667eea</div>
+            <div class="color-code" id="colorCode">#ff6b35</div>
 
             <!-- Label descriptif -->
             <div class="color-label">Code Hexadécimal</div>
@@ -360,7 +360,7 @@
          */
         window.onload = function() {
             const colorPreview = document.getElementById('colorPreview');
-            colorPreview.style.background = '#667eea'; // Couleur violette initiale
+            colorPreview.style.background = '#ff6b35'; // Couleur orange initiale
         };
     </script>
 </body>
