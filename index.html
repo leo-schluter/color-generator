@@ -1,50 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- Métadonnées de base -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Générateur de Couleurs</title>
+
     <style>
+        /* ===================================
+           RESET ET CONFIGURATION GLOBALE
+           =================================== */
+
+        /* Reset des marges et paddings par défaut du navigateur */
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Inclut les bordures et padding dans la largeur totale */
         }
 
+        /* ===================================
+           STYLES DU BODY
+           =================================== */
+
+        /* Conteneur principal avec centrage flexbox */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center; /* Centre horizontalement */
+            align-items: center;     /* Centre verticalement */
+            min-height: 100vh;       /* Hauteur minimale = hauteur viewport */
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* Transition fluide du fond lors du changement de couleur */
             transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* ===================================
+           CONTENEUR PRINCIPAL
+           =================================== */
+
+        /* Boîte blanche centrale avec effet de glassmorphisme */
         .container {
             text-align: center;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.95); /* Blanc semi-transparent */
             padding: 50px 60px;
             border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); /* Ombre portée profonde */
+            backdrop-filter: blur(10px); /* Effet de flou d'arrière-plan */
             transform: translateY(0);
             transition: transform 0.3s ease;
         }
 
+        /* Effet de levée au survol */
         .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+            transform: translateY(-5px); /* Monte de 5px */
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35); /* Ombre plus prononcée */
         }
+
+        /* ===================================
+           TITRE PRINCIPAL
+           =================================== */
 
         h1 {
             font-size: 2.5rem;
             color: #333;
             margin-bottom: 30px;
             font-weight: 700;
-            letter-spacing: -1px;
+            letter-spacing: -1px; /* Espacement négatif pour un look moderne */
         }
 
+        /* ===================================
+           ZONE D'AFFICHAGE DE LA COULEUR
+           =================================== */
+
+        /* Conteneur de l'aperçu et du code couleur */
         .color-display {
             background: white;
             padding: 30px;
@@ -54,15 +82,17 @@
             transition: all 0.3s ease;
         }
 
+        /* Code hexadécimal de la couleur */
         .color-code {
             font-size: 3rem;
             font-weight: 700;
-            color: #667eea;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 3px;
-            transition: color 0.5s ease;
+            color: #667eea; /* Couleur initiale */
+            font-family: 'Courier New', monospace; /* Police à chasse fixe */
+            letter-spacing: 3px; /* Espacement pour lisibilité */
+            transition: color 0.5s ease; /* Transition de couleur fluide */
         }
 
+        /* Label sous le code couleur */
         .color-label {
             font-size: 0.9rem;
             color: #666;
@@ -71,6 +101,11 @@
             letter-spacing: 2px;
         }
 
+        /* ===================================
+           BOUTON DE GÉNÉRATION
+           =================================== */
+
+        /* Bouton principal avec dégradé */
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -78,7 +113,7 @@
             padding: 18px 45px;
             font-size: 1.1rem;
             font-weight: 600;
-            border-radius: 50px;
+            border-radius: 50px; /* Bouton arrondi (pill shape) */
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
@@ -86,156 +121,246 @@
             letter-spacing: 1px;
         }
 
+        /* Effet au survol du bouton */
         button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+            transform: translateY(-3px); /* Lévitation au survol */
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5); /* Ombre agrandie */
         }
 
+        /* Effet au clic du bouton */
         button:active {
-            transform: translateY(-1px);
+            transform: translateY(-1px); /* Légère compression */
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
 
+        /* ===================================
+           ANIMATIONS CSS
+           =================================== */
+
+        /* Animation de pulsation pour l'aperçu de couleur */
         @keyframes pulse {
             0%, 100% {
-                transform: scale(1);
+                transform: scale(1);      /* Taille normale */
             }
             50% {
-                transform: scale(1.05);
+                transform: scale(1.05);   /* Grossit de 5% */
             }
         }
 
+        /* Classe pour appliquer l'animation de pulsation */
         .animate-pulse {
             animation: pulse 0.5s ease;
         }
 
+        /* Animation d'apparition en fondu au chargement */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(-20px); /* Commence 20px au-dessus */
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0);     /* Position finale */
             }
         }
 
+        /* Application de l'animation au conteneur */
         .container {
             animation: fadeIn 0.6s ease;
         }
 
+        /* ===================================
+           APERÇU DE COULEUR (CERCLE)
+           =================================== */
+
+        /* Cercle d'aperçu de la couleur générée */
         .color-preview {
             width: 120px;
             height: 120px;
             margin: 20px auto;
-            border-radius: 50%;
+            border-radius: 50%;              /* Forme circulaire */
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: all 0.5s ease;
-            border: 5px solid white;
+            transition: all 0.5s ease;       /* Transition fluide */
+            border: 5px solid white;         /* Bordure blanche */
         }
 
+        /* ===================================
+           RESPONSIVE DESIGN (MOBILE)
+           =================================== */
+
+        /* Adaptation pour écrans mobiles (max 600px) */
         @media (max-width: 600px) {
             .container {
-                padding: 40px 30px;
+                padding: 40px 30px;  /* Padding réduit */
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 2rem;     /* Titre plus petit */
             }
 
             .color-code {
-                font-size: 2rem;
+                font-size: 2rem;     /* Code couleur plus petit */
             }
 
             button {
-                padding: 15px 35px;
+                padding: 15px 35px;  /* Bouton plus compact */
                 font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- ===================================
+         STRUCTURE HTML PRINCIPALE
+         =================================== -->
+
+    <!-- Conteneur central de l'application -->
     <div class="container">
+        <!-- Titre principal -->
         <h1>Générateur de Couleurs</h1>
 
+        <!-- Zone d'affichage de la couleur -->
         <div class="color-display">
+            <!-- Aperçu circulaire de la couleur -->
             <div class="color-preview" id="colorPreview"></div>
+
+            <!-- Code hexadécimal de la couleur -->
             <div class="color-code" id="colorCode">#667eea</div>
+
+            <!-- Label descriptif -->
             <div class="color-label">Code Hexadécimal</div>
         </div>
 
+        <!-- Bouton de génération de couleur -->
         <button id="generateBtn" onclick="generateColor()">
             Générer une Couleur
         </button>
     </div>
 
+    <!-- ===================================
+         LOGIQUE JAVASCRIPT
+         =================================== -->
+
     <script>
-        // Fonction pour générer une couleur hexadécimale aléatoire
+        /**
+         * Génère une couleur hexadécimale aléatoire
+         * @returns {string} Code couleur au format #RRGGBB
+         *
+         * Principe : Sélectionne 6 caractères aléatoires parmi 0-9 et A-F
+         * Exemple de sortie : #A3C4F3
+         */
         function generateRandomColor() {
-            const letters = '0123456789ABCDEF';
+            const letters = '0123456789ABCDEF'; // Caractères hexadécimaux possibles
             let color = '#';
+
+            // Génère 6 caractères aléatoires pour créer la couleur
             for (let i = 0; i < 6; i++) {
                 color += letters[Math.floor(Math.random() * 16)];
             }
+
             return color;
         }
 
-        // Fonction pour calculer la luminosité d'une couleur
+        /**
+         * Calcule la luminosité d'une couleur (non utilisée actuellement)
+         * @param {string} hex - Code hexadécimal de la couleur
+         * @returns {number} Valeur de luminosité entre 0 (noir) et 1 (blanc)
+         *
+         * Utilise la formule de luminosité perceptuelle
+         * Peut servir pour déterminer si un texte doit être noir ou blanc sur la couleur
+         */
         function getLuminance(hex) {
+            // Extraction des composantes RGB
             const r = parseInt(hex.substr(1, 2), 16);
             const g = parseInt(hex.substr(3, 2), 16);
             const b = parseInt(hex.substr(5, 2), 16);
+
+            // Formule de luminosité relative (ITU-R BT.709)
             return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
         }
 
-        // Fonction principale pour générer et appliquer la couleur
+        /**
+         * Fonction principale - Génère et applique une nouvelle couleur
+         * Met à jour l'interface avec la nouvelle couleur générée
+         *
+         * Cette fonction :
+         * 1. Génère une couleur aléatoire
+         * 2. Change le fond d'écran avec un dégradé
+         * 3. Affiche le code hexadécimal
+         * 4. Met à jour l'aperçu circulaire
+         * 5. Anime les changements
+         * 6. Adapte le style du bouton
+         */
         function generateColor() {
+            // Génération de la nouvelle couleur
             const newColor = generateRandomColor();
+
+            // Récupération des éléments DOM
             const colorCode = document.getElementById('colorCode');
             const colorPreview = document.getElementById('colorPreview');
             const container = document.querySelector('.container');
 
-            // Animer le changement de couleur
+            // 1. Mise à jour du fond d'écran avec dégradé
+            // Utilise la couleur générée et une version assombrie pour le dégradé
             document.body.style.background = `linear-gradient(135deg, ${newColor} 0%, ${adjustColor(newColor, -30)} 100%)`;
 
-            // Mettre à jour le code couleur
-            colorCode.textContent = newColor;
-            colorCode.style.color = newColor;
+            // 2. Affichage du code hexadécimal
+            colorCode.textContent = newColor;           // Texte du code
+            colorCode.style.color = newColor;           // Couleur du texte
 
-            // Mettre à jour l'aperçu de la couleur
+            // 3. Mise à jour de l'aperçu circulaire
             colorPreview.style.background = newColor;
 
-            // Ajouter une animation de pulsation
+            // 4. Animation de pulsation de l'aperçu
+            // On retire la classe puis on la rajoute pour redémarrer l'animation
             colorPreview.classList.remove('animate-pulse');
-            void colorPreview.offsetWidth; // Force reflow
+            void colorPreview.offsetWidth; // Force le reflow du DOM (nécessaire pour redémarrer l'animation)
             colorPreview.classList.add('animate-pulse');
 
-            // Ajuster la couleur du bouton
+            // 5. Personnalisation du bouton avec la nouvelle couleur
             const btn = document.getElementById('generateBtn');
             btn.style.background = `linear-gradient(135deg, ${newColor} 0%, ${adjustColor(newColor, -30)} 100%)`;
-            btn.style.boxShadow = `0 10px 25px ${newColor}66`;
+            btn.style.boxShadow = `0 10px 25px ${newColor}66`; // 66 = opacité 40% en hexa
         }
 
-        // Fonction pour ajuster la luminosité d'une couleur
+        /**
+         * Ajuste la luminosité d'une couleur hexadécimale
+         * @param {string} color - Code hexadécimal de la couleur (#RRGGBB)
+         * @param {number} percent - Pourcentage d'ajustement (-100 à 100)
+         *                          Négatif = assombrir, Positif = éclaircir
+         * @returns {string} Nouvelle couleur ajustée au format #RRGGBB
+         *
+         * Exemple : adjustColor('#FF0000', -30) retourne une version plus sombre de rouge
+         */
         function adjustColor(color, percent) {
+            // Conversion de la couleur hex en nombre entier
             const num = parseInt(color.slice(1), 16);
-            const amt = Math.round(2.55 * percent);
-            const R = (num >> 16) + amt;
-            const G = (num >> 8 & 0x00FF) + amt;
-            const B = (num & 0x0000FF) + amt;
 
+            // Calcul du montant d'ajustement (percent est sur 100, on le convertit sur 255)
+            const amt = Math.round(2.55 * percent);
+
+            // Extraction et ajustement des composantes RGB via manipulation binaire
+            const R = (num >> 16) + amt;              // Décalage de 16 bits pour R
+            const G = (num >> 8 & 0x00FF) + amt;      // Décalage de 8 bits et masque pour G
+            const B = (num & 0x0000FF) + amt;         // Masque pour B
+
+            // Reconstruction de la couleur avec validation des limites (0-255)
+            // 0x1000000 est utilisé pour garantir 6 chiffres hexa
             return '#' + (
                 0x1000000 +
-                (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
-                (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
-                (B < 255 ? (B < 1 ? 0 : B) : 255)
-            ).toString(16).slice(1);
+                (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +  // Clamp R entre 0 et 255
+                (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +    // Clamp G entre 0 et 255
+                (B < 255 ? (B < 1 ? 0 : B) : 255)              // Clamp B entre 0 et 255
+            ).toString(16).slice(1); // Conversion en hexa et suppression du 1 initial
         }
 
-        // Initialiser avec la couleur par défaut
+        /**
+         * Initialisation au chargement de la page
+         * Applique la couleur par défaut à l'aperçu circulaire
+         */
         window.onload = function() {
             const colorPreview = document.getElementById('colorPreview');
-            colorPreview.style.background = '#667eea';
+            colorPreview.style.background = '#667eea'; // Couleur violette initiale
         };
     </script>
 </body>
