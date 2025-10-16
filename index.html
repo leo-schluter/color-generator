@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Couleurs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: background 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 60px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transform: translateY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .color-display {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .color-code {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #667eea;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
+            transition: color 0.5s ease;
+        }
+
+        .color-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeIn 0.6s ease;
+        }
+
+        .color-preview {
+            width: 120px;
+            height: 120px;
+            margin: 20px auto;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+            border: 5px solid white;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 30px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .color-code {
+                font-size: 2rem;
+            }
+
+            button {
+                padding: 15px 35px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Générateur de Couleurs</h1>
+
+        <div class="color-display">
+            <div class="color-preview" id="colorPreview"></div>
+            <div class="color-code" id="colorCode">#667eea</div>
+            <div class="color-label">Code Hexadécimal</div>
+        </div>
+
+        <button id="generateBtn" onclick="generateColor()">
+            Générer une Couleur
+        </button>
+    </div>
+
+    <script>
+        // Fonction pour générer une couleur hexadécimale aléatoire
+        function generateRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // Fonction pour calculer la luminosité d'une couleur
+        function getLuminance(hex) {
+            const r = parseInt(hex.substr(1, 2), 16);
+            const g = parseInt(hex.substr(3, 2), 16);
+            const b = parseInt(hex.substr(5, 2), 16);
+            return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        }
+
+        // Fonction principale pour générer et appliquer la couleur
+        function generateColor() {
+            const newColor = generateRandomColor();
+            const colorCode = document.getElementById('colorCode');
+            const colorPreview = document.getElementById('colorPreview');
+            const container = document.querySelector('.container');
+
+            // Animer le changement de couleur
+            document.body.style.background = `linear-gradient(135deg, ${newColor} 0%, ${adjustColor(newColor, -30)} 100%)`;
+
+            // Mettre à jour le code couleur
+            colorCode.textContent = newColor;
+            colorCode.style.color = newColor;
+
+            // Mettre à jour l'aperçu de la couleur
+            colorPreview.style.background = newColor;
+
+            // Ajouter une animation de pulsation
+            colorPreview.classList.remove('animate-pulse');
+            void colorPreview.offsetWidth; // Force reflow
+            colorPreview.classList.add('animate-pulse');
+
+            // Ajuster la couleur du bouton
+            const btn = document.getElementById('generateBtn');
+            btn.style.background = `linear-gradient(135deg, ${newColor} 0%, ${adjustColor(newColor, -30)} 100%)`;
+            btn.style.boxShadow = `0 10px 25px ${newColor}66`;
+        }
+
+        // Fonction pour ajuster la luminosité d'une couleur
+        function adjustColor(color, percent) {
+            const num = parseInt(color.slice(1), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+
+            return '#' + (
+                0x1000000 +
+                (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+                (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+                (B < 255 ? (B < 1 ? 0 : B) : 255)
+            ).toString(16).slice(1);
+        }
+
+        // Initialiser avec la couleur par défaut
+        window.onload = function() {
+            const colorPreview = document.getElementById('colorPreview');
+            colorPreview.style.background = '#667eea';
+        };
+    </script>
+</body>
+</html>
